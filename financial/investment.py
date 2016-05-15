@@ -67,6 +67,10 @@ class Investment(object):
         pay = self.get_interest_return()
         return (rest_period - 1) * pay + self._amount
 
+    # 获取当前投资的本金
+    def get_init_amount(self):
+        return self._amount
+
     def __str__(self):
         return "%s, 周期：%d" % (str(self._cash_flow), self._period)
 
@@ -77,6 +81,10 @@ if __name__ == '__main__':
     init_amount = int(args[3])
     monthly_amount = int(args[4])
     period = int(args[5])
+    if len(args) > 6:
+        debt = int(args[6])
+        debt_rate = float(args[7])
+        debt_period = int(args[8])
 
     # 实际的收益
     cash_amount = 0
@@ -90,8 +98,10 @@ if __name__ == '__main__':
     monthly_return = 0
     # 当前投资包的总资产
     total_property = 0
+    # 当前投资包的总本金，即利息的基数
+    total_init_amount = 0
     # 目标是：总资产超过target_amount
-    while total_property < target_amount:
+    while True:
         # while month_period < 20:
         # 时间在推移，往前一个月
         month_period += 1
@@ -99,6 +109,8 @@ if __name__ == '__main__':
         monthly_return = 0
         # 当前总资产，归零
         total_property = 0
+        # 当前总本金，归零
+        total_init_amount = 0
 
         # 检查投资包
         for invest in investment_package:
@@ -124,11 +136,15 @@ if __name__ == '__main__':
         # 计算当前总资产
         for i in investment_package:
             total_property += i.get_rest_property()
+            total_init_amount += i.get_init_amount()
 
-        print '第%d月，当前总资产：%d，现金收入为：%d, 再次投资：%d' % (month_period, total_property, monthly_return, new_investment)
+        print '第%d月，当前总本金：%d，当前总资产：%d，现金收入为：%d, 再次投资：%d' % (month_period, total_init_amount, total_property, monthly_return, new_investment)
         print '-------------------------------------------------------'
+
+        if total_init_amount > target_amount:
+            break
 
     print '您初始投入：%d，年化利息是：%d%%，投资周期是%d个月，如果您每个月坚持追加投资：%d元，那么，达到您的预定资产：%d' % (init_amount, rate * 100, period,monthly_amount, target_amount)
     print '将历时%d月[%d年%d月]，月现金收入为：%d' % (month_period, month_period / 12, month_period % 12, monthly_return)
-    print '总共投入本金：%d，当前总资产：%d' % (month_period * 2000, total_property)
+    print '总共投入本金：%d，当前总本金：%d，当前总资产：%d' % (month_period * monthly_amount, total_init_amount, total_property)
     print '-------------------------------------------------------'
