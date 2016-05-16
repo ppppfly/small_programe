@@ -4,14 +4,15 @@ import sys
 import os
 import commands
 
-path = sys.path
-print type(path[0])
+path = sys.path[0].split('/footscript')[0]
+print path
 # print path.split('/')
 
 # os.system('pip list')
-
-# os.system('source ../venv/bin/activate')
+cmd = 'source %s/venv/bin/activate' % path
+print cmd
+os.system(cmd)
 
 print '------------'
 
-# os.system('pip list')
+os.system('pip list')
