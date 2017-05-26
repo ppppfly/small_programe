@@ -34,8 +34,7 @@ def check_duplicate(key):
         for _m in g1.members:
             for _n in g2.members:
                 if _m == _n:
-                    # print('【', g1.name, '】【', g2.name, '】 --》[', _m.display_name, '][', _n.display_name, ']')
-                    print(g1.name, '\t', g2.name, '\t', _m.display_name, '\t', _n.display_name)
+                    print(g1.name, ',', g2.name, ',', _m.display_name, ',', _n.display_name, ',', _n.nick_name)
 
 
 embed()
